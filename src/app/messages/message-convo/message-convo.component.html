@@ -1,0 +1,47 @@
+<header class="bg-white flex justify-between p-4 mb-2 text-gray-700">
+  <h1 class="text-2xl font-semibold">
+    {{ user.firstName }} {{ user.lastName }}
+  </h1>
+  <button
+    (click)="deleteConvo()"
+    class="hover:bg-slate-200 px-2 rounded-full hover:shadow"
+  >
+    <i class="pi pi-trash"></i>
+  </button>
+</header>
+
+<!-- Chat Messages -->
+<ng-container *ngIf="convo$ | async as convo">
+  <div
+    class="overflow-auto h-[500px]"
+    #scrollme
+    [scrollTop]="scrollme.scrollHeight"
+  >
+    <ng-container *ngFor="let message of convo.messages">
+      <ng-container *ngIf="isOutGoing(message); else incoming">
+        <app-outgoing-message [message]="message"></app-outgoing-message>
+      </ng-container>
+      <ng-template #incoming>
+        <app-incoming-message [message]="message"></app-incoming-message>
+      </ng-template>
+    </ng-container>
+  </div>
+</ng-container>
+
+<!-- Chat Input -->
+<footer class="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
+  <div class="flex items-center">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      class="w-full p-2 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500"
+      [(ngModel)]="newMessage"
+    />
+    <button
+      (click)="sendMessage()"
+      class="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2"
+    >
+      Send
+    </button>
+  </div>
+</footer>

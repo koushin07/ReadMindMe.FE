@@ -1,0 +1,58 @@
+/* Custom CSS to adjust the size of p-toast */
+
+/* Adjusting the size of the main container */
+.p-toast {
+  /* Adjust width */
+  width: 300px; /* Change the width as needed */
+
+  /* Adjust height */
+  height: auto; /* Adjust height accordingly or use a fixed height if needed */
+
+  /* Add more CSS properties as needed */
+}
+
+/* Adjusting the size of the message container */
+.p-toast-message {
+  /* Adjust padding */
+  padding: 10px; /* Change the padding as needed */
+
+  /* Adjust font size */
+  font-size: 14px; /* Change the font size as needed */
+
+  /* Add more CSS properties as needed */
+}
+
+/* Adjusting the size of the message content */
+.p-toast-message-content {
+  /* Adjust font size */
+  font-size: 14px; /* Change the font size as needed */
+
+  /* Add more CSS properties as needed */
+}
+
+/* Adjusting the size of the summary and detail */
+.p-toast-summary,
+.p-toast-detail {
+  /* Adjust font size */
+  font-size: 14px; /* Change the font size as needed */
+
+  /* Add more CSS properties as needed */
+}
+
+/* Adjusting the size of the close icon */
+.p-toast-icon-close {
+  /* Adjust size */
+  width: 20px;
+  height: 20px;
+
+  /* Add more CSS properties as needed */
+}
+
+/* Adjusting the size of the severity icon */
+.p-toast-icon {
+  /* Adjust size */
+  width: 5px;
+  height: 5px;
+
+  /* Add more CSS properties as needed */
+}

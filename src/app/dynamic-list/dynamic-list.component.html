@@ -1,0 +1,12 @@
+<div>
+  <input type="text" [(ngModel)]="newItem" placeholder="Enter item name" />
+  <button (click)="addItem()">Add</button>
+</div>
+<ul
+  *ngFor="let item of items; let i = index"
+  [class.fade-in-from-top]="animating && i === 0"
+>
+  {{
+    item.name
+  }}
+</ul>
