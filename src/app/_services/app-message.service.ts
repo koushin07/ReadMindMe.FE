@@ -19,7 +19,18 @@ export class AppMessageService {
   constructor(private http: HttpClient, private userService: UserService, private conversationService: ConversationService) { }
 
 
- 
+  createMessageHub(convoId: number) {
+    const token = this.userService.authTokenSource.getValue()
+    this.hubConnection =  new HubConnectionBuilder()
+     .withUrl(this.hubUrl + '/chat?convo='+convoId, {
+        accessTokenFactory: () => token!
+      })
+     .withAutomaticReconnect()
+     .build();
+    this.hubConnection.start().then(_=>console.log('message connected')).catch(_=>console.log("error connecting"));
+    
+  }
+
   loadMessage(id: number) {
     return this.conversationService.conversationList$.pipe(
       map(convo => {
@@ -28,9 +39,9 @@ export class AppMessageService {
     )
   }
 
-  sendMessage(convoId: number, content: string) { 
+sendMessage(convoId: number, content: string, otherUserId: number) { 
   
-    return this.hubConnection?.invoke('SendMessage', { content, conversationId: convoId }).catch((err) => { 
+    return this.hubConnection?.invoke('SendMessage', { content, conversationId: convoId, otherUserId }).catch((err) => { 
       console.log(err);
     })
   }

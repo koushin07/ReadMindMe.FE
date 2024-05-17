@@ -28,7 +28,7 @@
     <!-- Contact List -->
     <p-scrollPanel [style]="{ height: '80vh' }" styleClass="bg-white w-full">
       <div
-        *ngFor="let convo of conversationService.conversationList$ | async"
+        *ngFor="let convo of convo$ | async"
         class="flex flex-col space-y-4 bg-inherit rounded shdow mx-2 first:mt-2 mb-2"
       >
         <a

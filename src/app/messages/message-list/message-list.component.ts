@@ -34,10 +34,17 @@ export class MessageListComponent implements OnInit{
         ];
     
     this.loadUser()
-   
-    // this.conversationService.createHubConnection()
-    this.conversationService.receiveConversationThread();
+    this.conversationService.createHubConnection()
+    this.loadConversation();
+    
   }
+
+  loadConversation() {
+    this.conversationService.hubConnection?.on("ReceiveConversationThread", convos => {
+      this.convoSource.next(convos)
+    })
+  }
+  
 
   
   loadUser() {

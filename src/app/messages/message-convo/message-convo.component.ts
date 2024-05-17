@@ -17,6 +17,8 @@ import { ScrollPanel } from 'primeng/scrollpanel';
 export class MessageConvoComponent implements OnInit {
   private convoSource = new BehaviorSubject<Conversation>({} as Conversation);
   convo$ = this.convoSource.asObservable();
+  private messageSource = new BehaviorSubject<AppMessage[]>([]);
+  message$ = this.messageSource.asObservable();
   newMessage: string = '';
   user: User = {} as User;
   id: number = 0;
@@ -32,19 +34,28 @@ export class MessageConvoComponent implements OnInit {
       this.id = +param.get('id')!;
     });
     this.loadUser();
-    this.joinConversation();
+    this.appMessageService.createMessageHub(this.id)
+    this.loadMessagesHub()
+
   }
 
-  loadMessages() {
-    this.conversationService.conversationList$
-      .pipe(take(1))
-      .subscribe((convo) => {
-        this.convoSource.next(
-          convo.find((convo) => convo.id === this.user.id)!
-        );
-      });
+  loadMessagesHub() {
+     this.appMessageService.hubConnection?.on("JoinConversation",( convo: Conversation) => {
+      this.convoSource.next(convo)
+      console.log(convo);
+    })
+    this.appMessageService.hubConnection?.on(
+      'NewMessage',
+      (data: AppMessage) => {
+        // console.log("new message received", data);
+        const prevVal = this.convoSource.getValue();
+        this.convoSource.next({...prevVal, messages: [...prevVal.messages, data]});
+      }
+    );
   }
 
+
+ 
   loadUser() {
     this.userService.currentUser$.subscribe((usr) => {
       if (usr) {
@@ -61,13 +72,7 @@ export class MessageConvoComponent implements OnInit {
       }
     );
 
-    this.conversationService.hubConnection?.on(
-      'NewMessage',
-      (data: Conversation) => {
-        console.log(`new Message: ${JSON.stringify(data)}`);
-        this.convoSource.next(data);
-      }
-    );
+    
     this.conversationService.hubConnection?.invoke('JoinConversation', this.id);
     console.log(this.convoSource.getValue() + ' the value');
   }
@@ -88,7 +93,7 @@ export class MessageConvoComponent implements OnInit {
           ? convo.post.user.id
           : convo.sender.id;
 
-      this.conversationService
+      this.appMessageService
         .sendMessage(convo.id, this.newMessage, otherUserId)
         ?.then((_) => (this.newMessage = ''));
     }

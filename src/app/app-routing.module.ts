@@ -30,7 +30,6 @@ const routes: Routes = [
       {
         path: 'message',
         component: MessageListComponent,
-        resolve: {connection: hubConnectionResolver},
         children: [
           { path: ':id', component: MessageConvoComponent}
         ]

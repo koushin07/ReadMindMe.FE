@@ -27,23 +27,22 @@ export class ConversationService {
   createHubConnection() {
     const token = this.userService.authTokenSource.getValue()
     this.hubConnection =  new HubConnectionBuilder()
-      .withUrl(this.hubUrl + '/chat', {
+      .withUrl(this.hubUrl + '/conversation', {
         accessTokenFactory: () => token!
       })
       .withAutomaticReconnect()
       .build();
    return this.hubConnection.start().then(_=> {
-      this.connectionEstablished.next(true);
-    });
+      console.log("connection started");
+   }).catch(err => { 
+     console.log(err, "error connecting");
+   });
 
 
   }
+  
 
-  receiveConversationThread() {
-    this.hubConnection?.on('ReceiveConversationThread', (convo: Conversation[]) => {
-      this.conversationListSource.next(convo);
-    })
-  }
+  
   LoadUserConversation(otherUserEmail: string) {
     this.hubConnection?.invoke('LoadUserConversation', otherUserEmail).catch((error=>console.log(error)))
   }
